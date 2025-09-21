@@ -67,7 +67,7 @@ const Layout = ({ children }) => {
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap component="div">
-          Post MeetingGenerator
+          Post Meeting Generator
         </Typography>
       </Toolbar>
       <List>

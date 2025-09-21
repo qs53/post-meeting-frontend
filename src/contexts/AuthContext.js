@@ -25,10 +25,20 @@ export const AuthProvider = ({ children }) => {
       console.log('AuthContext - token:', token, 'storedUser:', storedUser);
       
       if (token && storedUser) {
-        // For now, just use stored user data without verification
-        console.log('AuthContext - setting user from localStorage');
-        setUser(JSON.parse(storedUser));
-        setIsAuthenticated(true);
+        try {
+          // Parse stored user data
+          const userData = JSON.parse(storedUser);
+          console.log('AuthContext - setting user from localStorage');
+          setUser(userData);
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error('AuthContext - error parsing stored user data:', error);
+          // Clear invalid data
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user');
+          setUser(null);
+          setIsAuthenticated(false);
+        }
       } else {
         console.log('AuthContext - no stored auth data, setting unauthenticated');
         setUser(null);
@@ -53,10 +63,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    console.log('Logout called - clearing all auth data');
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('access_token');
     localStorage.removeItem('user');
+    // Clear any other stored data
+    localStorage.removeItem('linkedin_auth_success');
+    localStorage.removeItem('facebook_auth_success');
   };
 
   const value = {

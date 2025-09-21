@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Box, CircularProgress } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
 
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -33,15 +34,24 @@ function ProtectedRoute({ children }) {
   console.log('ProtectedRoute - isAuthenticated:', isAuthenticated, 'loading:', loading);
   
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Box 
+        display="flex" 
+        justifyContent="center" 
+        alignItems="center" 
+        minHeight="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
   
-  // Temporarily bypass authentication for testing
-  const token = localStorage.getItem('access_token');
-  const hasToken = !!token;
-  console.log('ProtectedRoute - hasToken:', hasToken);
+  if (!isAuthenticated) {
+    console.log('ProtectedRoute - user not authenticated, redirecting to login');
+    return <Navigate to="/login" replace />;
+  }
   
-  return (isAuthenticated || hasToken) ? children : <Navigate to="/login" />;
+  return children;
 }
 
 function App() {

@@ -67,7 +67,7 @@ const LoginPage = () => {
           }}
         >
           <Typography component="h1" variant="h4" gutterBottom>
-            Post MeetingGenerator
+            Post Meeting Generator
           </Typography>
           <Typography variant="body1" color="text.secondary" align="center" sx={{ mb: 3 }}>
             Connect your Google Calendar and generate social media content from your meetings
