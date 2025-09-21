@@ -104,25 +104,20 @@ const MeetingDetailModal = ({ open, onClose, meeting }) => {
     setGenerating(prev => ({ ...prev, social: true }));
     try {
       // Get custom prompt from settings for LinkedIn and Facebook
-      // let customPrompt = null;
-      // if (platform === 'linkedin' || platform === 'facebook') {
-      //   try {
-      //     const settingsResponse = await settingsAPI.getSettings();
-      //     customPrompt = platform === 'linkedin'
-      //       ? settingsResponse.data.linkedinPrompt
-      //       : settingsResponse.data.facebookPrompt;
-      //   } catch (error) {
-      //     console.warn('Could not fetch custom prompt, using default');
-      //   }
-      // }
+      let customPrompt = null;
+      if (platform === 'linkedin' || platform === 'facebook') {
+        try {
+          const settingsResponse = await settingsAPI.getSettings();
+          customPrompt = platform === 'linkedin'
+            ? settingsResponse.data.linkedinPrompt
+            : settingsResponse.data.facebookPrompt;
+        } catch (error) {
+          console.warn('Could not fetch custom prompt, using default');
+        }
+      }
 
-      // const response = await meetingAPI.generateSocialPost(meeting.id, platform, customPrompt);
-      setSocialPost({
-        content: `This is a test ${platform} post for the meeting: ${meeting.title}`,
-        disclaimer: '',
-        hashtags: `#${platform} #meeting #test`,
-        platform: platform
-      });
+      const response = await meetingAPI.generateSocialPost(meeting.id, platform, customPrompt);
+      setSocialPost(response.data.post);
       toast.success(`${platform.charAt(0).toUpperCase() + platform.slice(1)} post generated!`);
     } catch (error) {
       console.error('Error generating social post:', error);

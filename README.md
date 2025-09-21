@@ -24,7 +24,7 @@ npm install
 Create a `.env` file in the frontend directory:
 
 ```env
-REACT_APP_API_URL=http://localhost:8000
+REACT_APP_API_URL=http://ec2-34-221-10-72.us-west-2.compute.amazonaws.com
 ```
 
 ### 3. Run the Application
